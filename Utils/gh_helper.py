@@ -57,3 +57,11 @@ def get_parent_commit(sha):
     repo_obj = get_repo_object('pensando', 'sw')
     commit_obj = repo_obj.get_commit(sha)
     return commit_obj.parents[0].sha
+
+def get_pr_num_from_sha(sha):
+    repo_obj = get_repo_object('pensando', 'sw')
+    commit_obj = repo_obj.get_commit(sha)
+    pulls = commit_obj.get_pulls()
+    if pulls.totalCount==0:
+        return None
+    return pulls[0].number
