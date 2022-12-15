@@ -1,7 +1,6 @@
 from pprint import pprint
 from github import Github
 from functools import lru_cache
-
 import os
 
 ENV_GITHUB_TOKEN = "GITHUB_TOKEN"
@@ -44,3 +43,12 @@ def get_pr_info(pr_num):
     pr = repo_obj.get_pull(pr_num)
     return pr.labels
 
+def get_failed_jobs(sha):
+    repo_obj = get_repo_object("pensando", "sw")
+    commit_obj = repo_obj.get_commit(sha)
+    payload = commit_obj.get_combined_status()
+    failed_jobs = []
+    for jobs in payload.statuses:
+        if jobs.state == 'failure' and jobs.context != 'CI-RUN':
+            failed_jobs.append(jobs.context)
+    return failed_jobs
