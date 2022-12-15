@@ -18,7 +18,6 @@ def get_target_info(job_id):
 
     json_res = res.json()
     targets = json_res["Targets"]
-   #pprint(targets)
     target_names = list()
 
     for target in targets:
@@ -52,3 +51,11 @@ def get_all_jobs_and_targets_info(job_id):
         if job['SubPath'] == '':
             return get_target_info(job['ID'])
     return
+
+def get_failed_root_jobs(job_id):
+    jobs = get_target_info(job_id)
+    failed_jobs = []
+    for job in jobs:
+        if job['status'] == 'failure':
+            failed_jobs.append(job)
+    return failed_jobs        
