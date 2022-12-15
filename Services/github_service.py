@@ -28,3 +28,6 @@ class GithubService:
 
     def get_parent_commit(self, sha):
         return helper.get_parent_commit(sha)
+
+    def get_all_jobs(self, sha):
+        return helper.get_all_jobs(sha)    
