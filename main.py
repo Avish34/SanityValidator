@@ -44,7 +44,8 @@ def get_the_final_commit_internal(pr_target, pr_status, pr_to_root, pr_list):
                 final_result = 0
                 continue
             else:
-                final_result = pr_list[i]
+                if final_result == 0:
+                    final_result = pr_list[i]
         else:
             continue
     if final_result == 0:
