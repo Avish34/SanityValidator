@@ -5,14 +5,18 @@ from pprint import pprint
 from Services.github_service import *
 
 
-def find_matching_master_build(github_service, commit_id, dic_of_master_builds):
+def find_matching_master_build(github_service, commit_id, dic_of_master_builds, pr_id):
+    pr_to_sha = {}
     while(True):
-        print(commit_id)
+        pr_number = github_service.get_pr_number(commit_id)
+        if pr_number is not None:
+            pr_to_sha[pr_number] = commit_id
+        else:
+            pr_to_sha[pr_id] = commit_id    
         if commit_id in dic_of_master_builds.keys():
-            return dic_of_master_builds[commit_id]
+            return pr_to_sha, dic_of_master_builds[commit_id]
         commit_id = github_service.get_parent_commit(commit_id)
-    return
-
+    return pr_to_sha
 
 def main():
     pull_request_id = int(takeUserInput())
@@ -36,7 +40,8 @@ def main():
         print("Fetched failed target info:\n",end="")
         pprint(pr_root_target)
         dic_of_master_builds = get_master_builds()
-        matching_master_build = find_matching_master_build(github_service, sha, dic_of_master_builds)
+        pr_to_sha, matching_master_build = find_matching_master_build(github_service, sha, dic_of_master_builds, pull_request_id)
+        print(pr_to_sha)
         master_root_target = get_all_jobs_and_targets_info(matching_master_build['ID'])
         master_root_target = convert_target_dictionary(master_root_target)
         print("Fetched target info from master build:\n ",end="")
