@@ -18,7 +18,7 @@ class GithubService:
         pass
 
     def get_pr_number(self, sha):
-        pass
+        return helper.get_pr_num_from_sha(sha)
 
     def get_pr_info(self, pr_number):
         return helper.get_pr_info(pr_number)
