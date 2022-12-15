@@ -15,7 +15,7 @@ def get_github_object():
     """
     token = os.environ.get(ENV_GITHUB_TOKEN, None)
     if token is None:
-        print("GITHUB TOKEN not found", style="red")
+        print("GITHUB TOKEN not found")
         raise ValueError(f"Github API token is expected in the environment variable {ENV_GITHUB_TOKEN}")
     return Github(token)
 
