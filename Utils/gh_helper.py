@@ -50,5 +50,5 @@ def get_failed_jobs(sha):
     failed_jobs = []
     for jobs in payload.statuses:
         if jobs.state == 'failure' and jobs.context != 'CI-RUN':
-            failed_jobs.append(jobs.context)
+            failed_jobs.append({"context":jobs.context,"description":jobs.description})
     return failed_jobs

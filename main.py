@@ -14,6 +14,6 @@ def main():
     print(pr_info)
     print("Parent commit id" + sha)
     failed_jobs = github_service.get_failed_jobs(sha)
-
+    pprint(failed_jobs)
 
 main()
