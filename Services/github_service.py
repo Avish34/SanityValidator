@@ -22,3 +22,6 @@ class GithubService:
     
     def get_pr_info(self, pr_number):
         return helper.get_pr_info(pr_number)
+
+    def get_failed_jobs(self, sha):
+        return helper.get_failed_jobs(sha)
