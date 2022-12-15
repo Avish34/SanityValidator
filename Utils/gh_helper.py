@@ -52,3 +52,8 @@ def get_failed_jobs(sha):
         if jobs.state == 'failure' and jobs.context != 'CI-RUN':
             failed_jobs.append({"context":jobs.context,"description":jobs.description})
     return failed_jobs
+
+def get_parent_commit(sha):
+    repo_obj = get_repo_object('pensando', 'sw')
+    commit_obj = repo_obj.get_commit(sha)
+    return commit_obj.parents[0].sha
