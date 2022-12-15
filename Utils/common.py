@@ -15,6 +15,8 @@ def parse_targets(target_name):
     return res[1]
 
 def convert_target_dictionary(target_list):
+    res_target_dict = {}
     for target_dictionary in target_list:
         target_dictionary['name'] = parse_targets(target_dictionary['name'])
-    return target_list
+        res_target_dict[target_dictionary['name']] = target_dictionary['status']
+    return res_target_dict
