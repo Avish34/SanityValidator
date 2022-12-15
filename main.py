@@ -1,4 +1,5 @@
 from Utils.cli import takeUserInput
+from Utils.common import *
 from pprint import pprint
 from Services.github_service import *
 import sys
@@ -15,5 +16,7 @@ def main():
     print("Parent commit id" + sha)
     failed_jobs = github_service.get_failed_jobs(sha)
     pprint(failed_jobs)
+    root_job_id = get_root_job_id(failed_jobs)
+    print(root_job_id)
 
 main()
