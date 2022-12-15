@@ -7,12 +7,14 @@ from Services.github_service import *
 
 def find_matching_master_build(github_service, commit_id, dic_of_master_builds):
     while(True):
-        print(commit_id)
+        pr_number = github_service.get_pr_number(commit_id)
+        if pr_number is not None:
+            pass
+            print(pr_number, commit_id)
         if commit_id in dic_of_master_builds.keys():
             return dic_of_master_builds[commit_id]
         commit_id = github_service.get_parent_commit(commit_id)
     return
-
 
 def main():
     pull_request_id = int(takeUserInput())
@@ -32,10 +34,10 @@ def main():
 
     if root_job_id is not None:
         pr_root_target = get_failed_root_jobs(root_job_id)
-        pprint(f"Fetched target info: {pr_root_target}")
-
+        #pprint(f"Fetched target info: {pr_root_target}")
         dic_of_master_builds = get_master_builds()
         matching_master_build = find_matching_master_build(github_service, sha, dic_of_master_builds)
         master_root_target = get_all_jobs_and_targets_info(matching_master_build['ID'])
-        pprint(f"Fetched target info from master build: {master_root_target}")
+        #pprint(f"Fetched target info from master build: {master_root_target}")
+
 main()

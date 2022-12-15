@@ -11,9 +11,6 @@ class GithubService:
     def get_latest_commit(self, pr_number):
         return helper.get_latest_commit(pr_number)
 
-    def get_parent_commit(self, sha):
-        pass
-
     def verify_pr_number(self, pr_number):
         pass
 
