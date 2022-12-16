@@ -10,7 +10,10 @@ def main():
     pull_request_id = int(takeUserInput())
     print("Waiting for Status on PR...")
     failed_targets_pr = get_failed_targets(pull_request_id)
-    for val in failed_targets_pr:
-        print(colored(list(val.keys())[0],'red'), ":", colored(list(val.values())[0], 'red'))
-    
+    if failed_targets_pr is not None:
+        for val in failed_targets_pr:
+            print(colored(list(val.keys())[0],'red'), ":", colored(list(val.values())[0], 'red'))
+    else:
+        print("Not handling for now.")
+
 main()
