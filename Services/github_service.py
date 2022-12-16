@@ -20,8 +20,9 @@ class GithubService:
     def get_pr_number(self, sha):
         return helper.get_pr_num_from_sha(sha)
 
-    def get_pr_info(self, pr_number):
-        return helper.get_pr_info(pr_number)
+    def get_pr_base_branch(self, pr_number):
+        pr = helper.get_pr_info(pr_number)
+        return pr.base.ref
 
     def get_failed_jobs(self, sha):
         return helper.get_failed_jobs(sha)
@@ -30,4 +31,4 @@ class GithubService:
         return helper.get_parent_commit(sha)
 
     def get_all_jobs(self, sha):
-        return helper.get_all_jobs(sha)    
+        return helper.get_all_jobs(sha)

@@ -9,9 +9,9 @@ def find_matching_master_build(github_service, commit_id, dic_of_master_builds, 
     while(True):
         pr_number = github_service.get_pr_number(commit_id)
         if pr_number is not None:
-            pr_list.append(pr_number) 
+            pr_list.append(pr_number)
         else:
-            pr_list.append(pr_id) 
+            pr_list.append(pr_id)
         if commit_id in dic_of_master_builds.keys():
             return pr_list, dic_of_master_builds[commit_id]
         commit_id = github_service.get_parent_commit(commit_id)
@@ -53,7 +53,7 @@ def get_the_final_commit_internal(pr_target, pr_status, pr_to_root, pr_list):
         return pr_target,final_result
 
 def get_the_final_commit(target,status,pr_to_root, pr_list, build_pr_target):
-    
+
     if target not in build_pr_target.keys():
         return target,"Target not found on build"
     for build_target,build_status in build_pr_target.items():
@@ -79,27 +79,31 @@ def get_the_root_target(pr_to_root, pr_list, build_pr_target, my_pr_target):
 def get_failed_targets(pull_request_id):
     github_service = GithubService(pull_request_id)
     sha = github_service.get_latest_commit(pull_request_id)
-    pr_info = github_service.get_pr_info(pull_request_id)
+    base_branch = github_service.get_pr_base_branch(pull_request_id)
 
-    failed_jobs = github_service.get_failed_jobs(sha)
-    root_job_id = get_root_job_id(failed_jobs)
+    if base_branch == 'master':
+        failed_jobs = github_service.get_failed_jobs(sha)
+        root_job_id = get_root_job_id(failed_jobs)
 
-    if root_job_id is not None:
-        pr_root_target = get_failed_root_jobs(root_job_id)
-        pr_root_target = convert_target_dictionary(pr_root_target)
-        dic_of_master_builds = get_master_builds()
-        pr_list, matching_master_build = find_matching_master_build(github_service, sha, dic_of_master_builds, pull_request_id)
-        pr_list.reverse()
-        master_root_target = get_all_jobs_and_targets_info(matching_master_build['ID'])
-        master_root_target = convert_target_dictionary(master_root_target)
-        pr_to_root = get_all_pr_failed_root_jobs(pr_list, github_service)
-        '''
-        code for injecting failure
-        # pprint(pr_to_root)
-        # pr_to_root[10][60506]['build-apollo-x86-elba'] = 'failure'
-        # pr_to_root[9][pr_list[9]]['build-apollo-x86-elba'] = 'failure'
-        # pr_to_root[8][pr_list[8]]['build-apollo-x86-elba'] = 'failure' 
-        '''
-        final_result = get_the_root_target(pr_to_root, pr_list, master_root_target, pr_root_target)
-        
-        return final_result
+        if root_job_id is not None:
+            pr_root_target = get_failed_root_jobs(root_job_id)
+            pr_root_target = convert_target_dictionary(pr_root_target)
+            dic_of_master_builds = get_master_builds()
+            pr_list, matching_master_build = find_matching_master_build(github_service, sha, dic_of_master_builds, pull_request_id)
+            pr_list.reverse()
+            master_root_target = get_all_jobs_and_targets_info(matching_master_build['ID'])
+            master_root_target = convert_target_dictionary(master_root_target)
+            pr_to_root = get_all_pr_failed_root_jobs(pr_list, github_service)
+            '''
+            code for injecting failure
+            # pprint(pr_to_root)
+            # pr_to_root[10][60506]['build-apollo-x86-elba'] = 'failure'
+            # pr_to_root[9][pr_list[9]]['build-apollo-x86-elba'] = 'failure'
+            # pr_to_root[8][pr_list[8]]['build-apollo-x86-elba'] = 'failure'
+            '''
+            final_result = get_the_root_target(pr_to_root, pr_list, master_root_target, pr_root_target)
+
+            return final_result
+    else:
+        print(f'PR is raised against {base_branch}, not against master')
+        return None

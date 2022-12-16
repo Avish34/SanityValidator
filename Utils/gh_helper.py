@@ -41,7 +41,7 @@ def get_latest_commit(pr_num):
 def get_pr_info(pr_num):
     repo_obj = get_repo_object("pensando", "sw")
     pr = repo_obj.get_pull(pr_num)
-    return pr.labels
+    return pr
 
 def get_failed_jobs(sha):
     repo_obj = get_repo_object("pensando", "sw")
