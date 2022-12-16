@@ -66,12 +66,10 @@ def get_the_final_commit(target,status,pr_to_root, pr_list, build_pr_target):
                 return pr_target,final_result
     return 0,0
 
-def get_the_root_target(pr_to_root, pr_list):
+def get_the_root_target(pr_to_root, pr_list, build_pr_target, my_pr_target):
     length = len(pr_list)
-    my_pr_target = pr_to_root[length-1][pr_list[length-1]]
-    build_pr_target = pr_to_root[0][pr_list[0]]
     pr_id_for_that_target = []
-    pprint(build_pr_target)
+    # pprint(build_pr_target)
     for target,status in my_pr_target.items():
         if status != 'success':
             pr_target,result = get_the_final_commit(target,status, pr_to_root,pr_list, build_pr_target)
@@ -109,8 +107,10 @@ def main():
         # pprint(master_root_target)
         pr_to_root = get_all_pr_failed_root_jobs(pr_list, github_service)
         # pprint(pr_to_root)
-        pr_to_root[10][60506]['build-apollo-x86-elba'] = 'failure'
-        final_result = get_the_root_target(pr_to_root, pr_list)
+        # pr_to_root[10][60506]['build-apollo-x86-elba'] = 'failure'
+        # pr_to_root[9][pr_list[9]]['build-apollo-x86-elba'] = 'failure'
+        # pr_to_root[8][pr_list[8]]['build-apollo-x86-elba'] = 'failure' 
+        final_result = get_the_root_target(pr_to_root, pr_list, master_root_target, pr_root_target)
         
         pprint(final_result)
 main()
